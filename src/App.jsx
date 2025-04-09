@@ -15,8 +15,8 @@ export default function KumaKollectiveWebsite() {
 
       {/* Hero Section */}
       <section id="home" className="text-center py-16 px-4">
-        <h1 className="text-4xl font-bold mb-4">Streaming with Heart, Roaring with Purpose</h1>
-        <p className="text-lg mb-6">Meet the bears behind the magic.</p>
+        <h1 className="text-4xl font-bold mb-4">We're totally not a cult.</h1>
+        <p className="text-lg mb-6">Meet the bears behind the magic!</p>
         <div className="space-x-4">
           <button className="bg-amber-400 text-black px-4 py-2 rounded-xl hover:bg-amber-300">
             Meet the Kollective
@@ -49,12 +49,12 @@ export default function KumaKollectiveWebsite() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Example Event Card */}
           <div className="bg-gray-700 rounded-xl p-4 shadow-md">
-            <h3 className="text-xl font-semibold mb-2">Winter of Chains</h3>
+            <h3 className="text-xl font-semibold mb-2">Thankmas</h3>
             <p className="text-sm">Our seasonal charity arc featuring lore, chaos, and collabs galore.</p>
           </div>
           <div className="bg-gray-700 rounded-xl p-4 shadow-md">
-            <h3 className="text-xl font-semibold mb-2">Celestial Thaw (Coming May)</h3>
-            <p className="text-sm">Spring arc about change, connection, and reclaiming your voice.</p>
+            <h3 className="text-xl font-semibold mb-2">Pride Thingy</h3>
+            <p className="text-sm">Something to give back!</p>
           </div>
         </div>
       </section>
@@ -73,7 +73,7 @@ export default function KumaKollectiveWebsite() {
         <h2 className="text-3xl font-semibold text-center mb-6">About the Kollective</h2>
         <p className="max-w-2xl mx-auto text-center">
           The Kuma Kollective is a group of bear-themed VTubers working together to bring cozy chaos, charitable streams,
-          and creative storytelling to the den. We roar louder when we roar together.
+          and creative storytelling to the den. We love sour candy!
         </p>
       </section>
 
