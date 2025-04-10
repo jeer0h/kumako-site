@@ -11,6 +11,8 @@ export default function KumaKollectiveWebsite() {
 
   const [memberData, setMemberData] = useState({});
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   useEffect(() => {
     members.forEach(async (member) => {
       const res = await fetch(`/api/twitch-user?login=${member.twitch}`);
@@ -91,16 +93,27 @@ export default function KumaKollectiveWebsite() {
             <img
               src="/images/logo.webp"
               alt="Kuma Kollective Logo"
-              className="h-[160px] -mt-8 -mb-8 ml-[-10px] object-contain drop-shadow-xl transition-transform duration-300 hover:rotate-2 hover:scale-105"
+              className="h-24 sm:h-[160px] object-contain drop-shadow-xl transition-transform duration-300 hover:rotate-2 hover:scale-105"
             />
           </a>
-          <nav className="space-x-4 mt-2 text-white z-20">
-            <a href="#home" className="hover:text-amber-400">Home</a>
-            <a href="#members" className="hover:text-amber-400">Members</a>
-            <a href="#streams" className="hover:text-amber-400">Streams</a>
-            <a href="#events" className="hover:text-amber-400">Events</a>
-            <a href="#about" className="hover:text-amber-400">About</a>
-          </nav>
+          <div className="relative z-20 sm:flex sm:items-center">
+            {/* Hamburger toggle for mobile */}
+            <button
+              className="sm:hidden p-2 text-white"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              ☰
+            </button>
+
+            {/* Navigation links */}
+            <nav className={`flex-col sm:flex-row sm:flex gap-4 mt-2 text-white ${isMenuOpen ? 'flex' : 'hidden'} sm:!flex`}>
+              <a href="#home" className="hover:text-amber-400">Home</a>
+              <a href="#members" className="hover:text-amber-400">Members</a>
+              <a href="#streams" className="hover:text-amber-400">Streams</a>
+              <a href="#events" className="hover:text-amber-400">Events</a>
+              <a href="#about" className="hover:text-amber-400">About</a>
+            </nav>
+          </div>
         </header>
 
         <section id="home" className="text-center py-32 px-4 relative z-10 animate-fade-in">
@@ -188,11 +201,13 @@ export default function KumaKollectiveWebsite() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <img
-                      src={data?.avatar}
-                      alt={`${member.name}'s Twitch profile picture`}
-                      className="w-14 h-14 aspect-square rounded-full object-cover border-2 hover:ring-2 hover:ring-amber-400 transition"
-                    />
+                    <div className="w-14 h-14 rounded-full overflow-hidden border-2 hover:ring-2 hover:ring-amber-400 transition shrink-0">
+                      <img
+                        src={data?.avatar}
+                        alt={`${member.name}'s Twitch profile picture`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
                   </a>
                   <div>
                     <p className="text-lg font-semibold text-gray-100">{data?.name || member.name}</p>
