@@ -15,6 +15,13 @@ export default function KumaKollectiveWebsite() {
     members.forEach(async (member) => {
       const res = await fetch(`/api/twitch-user?login=${member.twitch}`);
       const data = await res.json();
+      // if (member.twitch === "jeeroh_") {
+      //   data.isLive = true;
+      //   data.viewers = 69;
+      //   data.title = "testing stream overlay (ignore me)";
+      //   data.game = "Marvel Rivals";
+      //   data.thumbnail = "https://static-cdn.jtvnw.net/previews-ttv/live_user_jeeroh_-640x360.jpg"; // optional static mock
+      // }
       console.log(data);
 
       setMemberData((prev) => ({
@@ -28,11 +35,36 @@ export default function KumaKollectiveWebsite() {
           title: data.title,
           game: data.game,
           isLive: data.isLive,
-          viewers: data.viewers
+          viewers: data.viewers,
+          thumbnail: data.thumbnail,
+          lastStreamDate: data.lastStreamDate
         },
       }));
     });
   }, []);
+
+  const formatDate = (isoString) => {
+    const date = new Date(isoString);
+    return date.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  };
+
+  const formatRelativeDate = (isoString) => {
+    if (!isoString) return "a while ago";
+    const then = new Date(isoString);
+    const now = new Date();
+    const diffMs = now - then;
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffDays < 1) return "today";
+    if (diffDays === 1) return "yesterday";
+    return `${diffDays} days ago`;
+  };
+
+
 
   const randomRotation = () => {
     const classes = [
@@ -46,6 +78,9 @@ export default function KumaKollectiveWebsite() {
     ];
     return classes[Math.floor(Math.random() * classes.length)];
   };
+
+  const onlineMembers = members.filter(member => memberData[member.twitch]?.isLive);
+  const offlineMembers = members.filter(member => !memberData[member.twitch]?.isLive);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white font-sans">
@@ -114,11 +149,14 @@ export default function KumaKollectiveWebsite() {
                 alt={`${member.name} Polaroid`}
                 className="w-full object-contain"
               />
-              <span
-                className="absolute top-2 right-2 bg-gray-400 text-white text-xs px-2 py-1 rounded-full animate-pulse"
-              >
-                {memberData[member.twitch]?.isLive ? "LIVE" : "Offline"}
-              </span>
+              {memberData[member.twitch]?.isLive && (
+                <span
+                  className="absolute top-2 right-2 flex items-center gap-1 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded-full animate-pulse"
+                >
+                  <span className="w-2 h-2 rounded-full bg-white" />
+                  LIVE
+                </span>
+              )}
             </div>
           ))}
         </div>
@@ -126,38 +164,63 @@ export default function KumaKollectiveWebsite() {
 
       <section id="streams" className="py-12 px-6">
         <h2 className="text-3xl font-semibold text-center mb-6">Who’s Live?</h2>
-        <ul className="max-w-2xl mx-auto space-y-4 mt-8">
-          {members.map((member, index) => {
+
+        {onlineMembers.length === 0 && (
+          <p className="text-center text-sm text-gray-400 mb-4">
+            None of the bears are live right now. Try again later!
+          </p>
+        )}
+
+        <ul className="max-w-3xl mx-auto space-y-4 mt-8">
+          {[...onlineMembers, ...offlineMembers].map((member, index) => {
             const data = memberData[member.twitch];
+            const isLive = data?.isLive;
+
             return (
               <li
                 key={index}
-                className="bg-gray-800 rounded-xl p-4 shadow flex items-center justify-between"
+                className={`rounded-xl p-4 shadow ${isLive ? 'bg-gray-700' : 'bg-gray-800'} flex flex-col sm:flex-row gap-4`}
               >
-                <div className="flex items-center gap-4">
-                  <img
-                    src={data?.avatar}
-                    alt={`${member.name}'s Twitch profile picture`}
-                    className="w-14 h-14 rounded-full object-cover border-2"
-                  />
+                <div className="flex gap-4">
+                  <a
+                    href={`https://twitch.tv/${member.twitch}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src={data?.avatar}
+                      alt={`${member.name}'s Twitch profile picture`}
+                      className="w-14 h-14 rounded-full object-cover border-2 hover:ring-2 hover:ring-amber-400 transition"
+                    />
+                  </a>
                   <div>
                     <p className="text-lg font-semibold text-gray-100">{data?.name || member.name}</p>
-                    <p className="text-sm text-gray-300">
-                      <span className="font-medium text-white">Last Stream:</span> {data?.title || "Checking..."}
-                    </p>
-                    <p className="text-xs text-gray-400">{data?.game}</p>
+                    {isLive ? (
+                      <>
+                        <p className="text-sm text-green-400 font-medium">Currently Live</p>
+                        <p className="text-sm text-gray-300">{data?.game}</p>
+                        <p className="text-xs text-gray-400 italic">“{data?.title}”</p>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-sm text-gray-300">
+                          <span className="font-medium text-white">Last streamed</span> {data?.lastStreamDate ? formatRelativeDate(data.lastStreamDate) : "sometime"}
+                        </p>
+                        <p className="text-xs text-gray-400 italic">
+                          “{data?.title}” on {data?.lastStreamDate ? formatDate(data.lastStreamDate) : "Unknown date"}
+                        </p>
+                      </>
+                    )}
                   </div>
                 </div>
-                <div className="flex items-center space-x-4 text-gray-300 text-sm">
-                  <div className="flex items-center gap-1">
-                    <span>👁️</span>
-                    <span>{data?.viewers || 0}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span>🤍</span>
-                    <span>{data?.followers?.toLocaleString() || 0}</span>
-                  </div>
-                </div>
+
+                {isLive && data?.thumbnail && (
+                  <img
+                    src={data.thumbnail}
+                    alt="Stream thumbnail"
+                    className="w-full sm:max-w-[240px] rounded-lg object-cover mt-2 sm:mt-0"
+                  />
+                )}
               </li>
             );
           })}
