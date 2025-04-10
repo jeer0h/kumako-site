@@ -1,3 +1,5 @@
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import { fetchSiteContent } from '../lib/contentful';
 import { useEffect, useState } from "react";
 
 export default function KumaKollectiveWebsite() {
@@ -10,10 +12,20 @@ export default function KumaKollectiveWebsite() {
   ];
 
   const [memberData, setMemberData] = useState({});
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [aboutContent, setAboutContent] = useState(null);
 
   useEffect(() => {
+    
+
+    async function loadAbout() {
+      const data = await fetchSiteContent("about-the-kollective");
+      setAboutContent(data);
+    }
+    loadAbout();
+
+
+
     members.forEach(async (member) => {
       const res = await fetch(`/api/twitch-user?login=${member.twitch}`);
       const data = await res.json();
@@ -259,14 +271,18 @@ export default function KumaKollectiveWebsite() {
         </div>
       </section>
 
-
       {/* About Section */}
       <section id="about" className="py-12 px-6">
-        <h2 className="text-3xl font-semibold text-center mb-6">About the Kollective</h2>
-        <p className="max-w-2xl mx-auto text-center">
-          The Kuma Kollective is a group of bear-themed VTubers working together to bring cozy chaos, charitable streams,
-          and creative storytelling to the den. We love sour candy!
-        </p>
+        <h2 className="text-3xl font-semibold text-center mb-6">
+          {aboutContent?.title || 'About the Banana'}
+        </h2>
+        <div className="max-w-2xl mx-auto text-center">
+          {aboutContent ? (
+            documentToReactComponents(aboutContent.content)
+          ) : (
+            <p>'Loading...'</p>
+          )}
+        </div>
       </section>
 
       {/* Footer */}
