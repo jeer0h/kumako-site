@@ -95,9 +95,10 @@ export default function KumaKollectiveWebsite() {
             />
           </a>
           <nav className="space-x-4 mt-2 text-white z-20">
+            <a href="#home" className="hover:text-amber-400">Home</a>
             <a href="#members" className="hover:text-amber-400">Members</a>
-            <a href="#events" className="hover:text-amber-400">Events</a>
             <a href="#streams" className="hover:text-amber-400">Streams</a>
+            <a href="#events" className="hover:text-amber-400">Events</a>
             <a href="#about" className="hover:text-amber-400">About</a>
           </nav>
         </header>
@@ -190,7 +191,7 @@ export default function KumaKollectiveWebsite() {
                     <img
                       src={data?.avatar}
                       alt={`${member.name}'s Twitch profile picture`}
-                      className="w-14 h-14 rounded-full object-cover border-2 hover:ring-2 hover:ring-amber-400 transition"
+                      className="w-14 h-14 aspect-square rounded-full object-cover border-2 hover:ring-2 hover:ring-amber-400 transition"
                     />
                   </a>
                   <div>
@@ -226,6 +227,38 @@ export default function KumaKollectiveWebsite() {
           })}
         </ul>
       </section>
+
+      {/* Events Section */}
+      <section id="events" className="py-12 px-6 bg-[#1F1F1F]">
+        <h2 className="text-3xl font-semibold text-center mb-6">Upcoming Events</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Example Event Card */}
+          <div className="bg-gray-700 rounded-xl p-4 shadow-md">
+            <h3 className="text-xl font-semibold mb-2">Thankmas</h3>
+            <p className="text-sm">Our seasonal charity arc featuring lore, chaos, and collabs galore.</p>
+          </div>
+          <div className="bg-gray-700 rounded-xl p-4 shadow-md">
+            <h3 className="text-xl font-semibold mb-2">Pride Thingy</h3>
+            <p className="text-sm">Something to give back!</p>
+          </div>
+        </div>
+      </section>
+
+
+      {/* About Section */}
+      <section id="about" className="py-12 px-6">
+        <h2 className="text-3xl font-semibold text-center mb-6">About the Kollective</h2>
+        <p className="max-w-2xl mx-auto text-center">
+          The Kuma Kollective is a group of bear-themed VTubers working together to bring cozy chaos, charitable streams,
+          and creative storytelling to the den. We love sour candy!
+        </p>
+      </section>
+
+      {/* Footer */}
+      <footer className="text-center py-6 text-sm text-gray-400 border-t border-gray-700 bg-[#1F1F1F]">
+        <p>© 2025 Kuma Kollective. All bears reserved.</p>
+      </footer>
+
     </div>
   );
 }
