@@ -29,23 +29,23 @@ export default function KumaKollectiveWebsite() {
     members.forEach(async (member) => {
       const res = await fetch(`/api/twitch-user?login=${member.twitch}`);
       const data = await res.json();
-      if (member.twitch === "jeeroh_") {
-        data.isLive = true;
-        data.viewers = 123;
-        data.title = "Solo queueing in Marvel Rivals until I cry";
-        data.game = "Marvel Rivals";
-        data.boxArt = "https://static-cdn.jtvnw.net/ttv-boxart/518204-72x96.jpg"; // Marvel Rivals
-        data.thumbnail = "https://static-cdn.jtvnw.net/previews-ttv/live_user_jeeroh_-640x360.jpg";
-      }
+      // if (member.twitch === "jeeroh_") {
+      //   data.isLive = true;
+      //   data.viewers = 123;
+      //   data.title = "Solo queueing in Marvel Rivals until I cry";
+      //   data.game = "Marvel Rivals";
+      //   data.boxArt = "https://static-cdn.jtvnw.net/ttv-boxart/518204-72x96.jpg"; // Marvel Rivals
+      //   data.thumbnail = "https://static-cdn.jtvnw.net/previews-ttv/live_user_jeeroh_-640x360.jpg";
+      // }
       
-      if (member.twitch === "terberri") {
-        data.isLive = true;
-        data.viewers = 42;
-        data.title = "[Ultimate Ironmon] Let us leave the lab today!";
-        data.game = "Pokémon FireRed/LeafGreen";
-        data.boxArt = "https://static-cdn.jtvnw.net/ttv-boxart/611282-72x96.jpg"; // Pokémon FireRed/LeafGreen
-        data.thumbnail = "https://static-cdn.jtvnw.net/cf_vods/d1m7jfoe9zdc1j/example-thumb.jpg";
-      }
+      // if (member.twitch === "terberri") {
+      //   data.isLive = true;
+      //   data.viewers = 42;
+      //   data.title = "[Ultimate Ironmon] Let us leave the lab today!";
+      //   data.game = "Pokémon FireRed/LeafGreen";
+      //   data.boxArt = "https://static-cdn.jtvnw.net/ttv-boxart/611282-72x96.jpg"; // Pokémon FireRed/LeafGreen
+      //   data.thumbnail = "https://static-cdn.jtvnw.net/cf_vods/d1m7jfoe9zdc1j/example-thumb.jpg";
+      // }
       console.log(data);
 
       setMemberData((prev) => ({
@@ -88,8 +88,6 @@ export default function KumaKollectiveWebsite() {
     if (diffDays === 1) return "yesterday";
     return `${diffDays} days ago`;
   };
-
-
 
   const randomRotation = () => {
     const classes = [
