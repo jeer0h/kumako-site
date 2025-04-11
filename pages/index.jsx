@@ -29,13 +29,23 @@ export default function KumaKollectiveWebsite() {
     members.forEach(async (member) => {
       const res = await fetch(`/api/twitch-user?login=${member.twitch}`);
       const data = await res.json();
-      // if (member.twitch === "jeeroh_") {
-      //   data.isLive = true;
-      //   data.viewers = 69;
-      //   data.title = "testing stream overlay (ignore me)";
-      //   data.game = "Marvel Rivals";
-      //   data.thumbnail = "https://static-cdn.jtvnw.net/previews-ttv/live_user_jeeroh_-640x360.jpg"; // optional static mock
-      // }
+      if (member.twitch === "jeeroh_") {
+        data.isLive = true;
+        data.viewers = 123;
+        data.title = "Solo queueing in Marvel Rivals until I cry";
+        data.game = "Marvel Rivals";
+        data.boxArt = "https://static-cdn.jtvnw.net/ttv-boxart/518204-72x96.jpg"; // Marvel Rivals
+        data.thumbnail = "https://static-cdn.jtvnw.net/previews-ttv/live_user_jeeroh_-640x360.jpg";
+      }
+      
+      if (member.twitch === "terberri") {
+        data.isLive = true;
+        data.viewers = 42;
+        data.title = "[Ultimate Ironmon] Let us leave the lab today!";
+        data.game = "Pokémon FireRed/LeafGreen";
+        data.boxArt = "https://static-cdn.jtvnw.net/ttv-boxart/611282-72x96.jpg"; // Pokémon FireRed/LeafGreen
+        data.thumbnail = "https://static-cdn.jtvnw.net/cf_vods/d1m7jfoe9zdc1j/example-thumb.jpg";
+      }
       console.log(data);
 
       setMemberData((prev) => ({
@@ -51,7 +61,8 @@ export default function KumaKollectiveWebsite() {
           isLive: data.isLive,
           viewers: data.viewers,
           thumbnail: data.thumbnail,
-          lastStreamDate: data.lastStreamDate
+          lastStreamDate: data.lastStreamDate,
+          boxArt: data.boxArt,
         },
       }));
     });
@@ -197,62 +208,115 @@ export default function KumaKollectiveWebsite() {
           </p>
         )}
 
-        <ul className="max-w-3xl mx-auto space-y-4 mt-8">
-          {[...onlineMembers, ...offlineMembers].map((member, index) => {
-            const data = memberData[member.twitch];
-            const isLive = data?.isLive;
+<ul className="max-w-3xl mx-auto space-y-4 mt-8">
+  {[...onlineMembers, ...offlineMembers].map((member, index) => {
+    const data = memberData[member.twitch];
+    const isLive = data?.isLive;
 
-            return (
-              <li
-                key={index}
-                className={`rounded-xl p-4 shadow ${isLive ? 'bg-gray-700' : 'bg-gray-800'} flex flex-col sm:flex-row gap-4`}
+    const card = (
+      <li
+        key={index}
+        className={`rounded-xl p-4 shadow ${isLive ? 'bg-gray-700' : 'bg-gray-800'} flex flex-col gap-4`}
+      >
+        {/* First Row */}
+        <div className={`flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4`}>
+          {/* Avatar + Info */}
+          <div className="flex gap-4 items-center">
+            {isLive ? (
+              <div className="w-14 h-14 rounded-full overflow-hidden border-2 hover:ring-2 hover:ring-amber-400 transition shrink-0">
+                <img
+                  src={data?.avatar}
+                  alt={`${member.name}'s Twitch profile picture`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ) : (
+              <a
+                href={`https://twitch.tv/${member.twitch}`}
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <div className="flex gap-4">
-                  <a
-                    href={`https://twitch.tv/${member.twitch}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <div className="w-14 h-14 rounded-full overflow-hidden border-2 hover:ring-2 hover:ring-amber-400 transition shrink-0">
-                      <img
-                        src={data?.avatar}
-                        alt={`${member.name}'s Twitch profile picture`}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </a>
-                  <div>
-                    <p className="text-lg font-semibold text-gray-100">{data?.name || member.name}</p>
-                    {isLive ? (
-                      <>
-                        <p className="text-sm text-green-400 font-medium">Currently Live</p>
-                        <p className="text-sm text-gray-300">{data?.game}</p>
-                        <p className="text-xs text-gray-400 italic">“{data?.title}”</p>
-                      </>
-                    ) : (
-                      <>
-                        <p className="text-sm text-gray-300">
-                          <span className="font-medium text-white">Last streamed</span> {data?.lastStreamDate ? formatRelativeDate(data.lastStreamDate) : "sometime"}
-                        </p>
-                        <p className="text-xs text-gray-400 italic">
-                          “{data?.title}” on {data?.lastStreamDate ? formatDate(data.lastStreamDate) : "Unknown date"}
-                        </p>
-                      </>
-                    )}
-                  </div>
-                </div>
-
-                {isLive && data?.thumbnail && (
+                <div className="w-14 h-14 rounded-full overflow-hidden border-2 hover:ring-2 hover:ring-amber-400 transition shrink-0">
                   <img
-                    src={data.thumbnail}
-                    alt="Stream thumbnail"
-                    className="w-full sm:max-w-[240px] rounded-lg object-cover mt-2 sm:mt-0"
+                    src={data?.avatar}
+                    alt={`${member.name}'s Twitch profile picture`}
+                    className="w-full h-full object-cover"
                   />
-                )}
-              </li>
-            );
-          })}
-        </ul>
+                </div>
+              </a>
+            )}
+            <div>
+              <p className="text-lg font-semibold text-gray-100">{data?.name || member.name}</p>
+              {isLive ? (
+                <>
+                  <p className="text-sm text-green-400 font-medium">Currently Live</p>
+                  <p className="text-sm text-gray-300">{data?.game}</p>
+                  <p className="text-xs text-gray-400 italic">“{data?.title}”</p>
+                </>
+              ) : (
+                <>
+                  <p className="text-sm text-gray-300">
+                    <span className="font-medium text-white">Last streamed</span>{" "}
+                    {data?.lastStreamDate ? formatRelativeDate(data.lastStreamDate) : "sometime"}
+                  </p>
+                  <p className="text-xs text-gray-400 italic">
+                    “{data?.title}” on {data?.lastStreamDate ? formatDate(data.lastStreamDate) : "Unknown date"}
+                  </p>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Box Art (only desktop) */}
+          {isLive && (
+            <img
+              src={data?.boxArt}
+              alt="Game box art"
+              className="hidden sm:block w-16 h-24 object-contain rounded"
+            />
+          )}
+        </div>
+
+        {/* Mobile: Box Art + Thumbnail side by side */}
+        {isLive && (
+          <div className="flex sm:hidden gap-4">
+            <img
+              src={data?.boxArt}
+              alt="Game box art"
+              className="w-1/3 object-contain rounded"
+            />
+            <img
+              src={data?.thumbnail}
+              alt="Stream thumbnail"
+              className="w-2/3 object-cover rounded"
+            />
+          </div>
+        )}
+
+        {/* Desktop: Full-width thumbnail */}
+        {isLive && (
+          <img
+            src={data?.thumbnail}
+            alt="Stream thumbnail"
+            className="hidden sm:block w-full rounded-lg object-cover"
+          />
+        )}
+      </li>
+    );
+
+    return isLive ? (
+      <a
+        key={index}
+        href={`https://twitch.tv/${member.twitch}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block"
+      >
+        {card}
+      </a>
+    ) : card;
+  })}
+</ul>
       </section>
 
       {/* Events Section */}
@@ -276,11 +340,13 @@ export default function KumaKollectiveWebsite() {
         <h2 className="text-3xl font-semibold text-center mb-6">
           {aboutContent?.title || 'About the Banana'}
         </h2>
-        <div className="max-w-2xl mx-auto text-center">
+        <div className="max-w-2xl mx-auto">
           {aboutContent ? (
-            documentToReactComponents(aboutContent.content)
+            <div className="prose prose-invert mx-auto text-white">
+              {documentToReactComponents(aboutContent.content)}
+            </div>
           ) : (
-            <p>'Loading...'</p>
+            <p>Loading...</p>
           )}
         </div>
       </section>

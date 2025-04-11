@@ -45,14 +45,18 @@ export default async function handler(req, res) {
   console.log("🎮 gameId to fetch:", gameId);
 
   let gameName = null;
+  let boxArt = null;
 
   if (gameId) {
     const gameRes = await fetch(`https://api.twitch.tv/helix/games?id=${gameId}`, { headers });
     const gameData = await gameRes.json();
     console.log("🎮 game data response:", gameData);
     gameName = gameData?.data?.[0]?.name || null;
-  }
 
+    const game = gameData.data?.[0];
+    boxArt = game?.box_art_url?.replace('{width}', '285').replace('{height}', '380');
+  }
+ 
   res.status(200).json({
     name: user.display_name,
     avatar: user.profile_image_url,
@@ -66,5 +70,6 @@ export default async function handler(req, res) {
     thumbnail: stream?.thumbnail_url?.replace("{width}", "640").replace("{height}", "360") ||
                vod?.thumbnail_url?.replace("%{width}", "640").replace("%{height}", "360") || null,
     lastStreamDate: vod?.created_at || null,
+    boxArt,
   });
 }
