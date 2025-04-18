@@ -117,7 +117,20 @@ export default function KumaKollectiveWebsite() {
       <Head>
         <title>Kuma Kollective</title>
         <meta name="description" content="The official home of the Kuma Kollective – bear-themed VTubers spreading cozy chaos, charity, and creativity." />
-        <link rel="icon" href="/favicon.ico" />
+
+        {/* PWA + Web App meta */}
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-title" content="Kuma Kollective" />
+        <meta name="theme-color" content="#1F1F1F" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {/* Icons */}
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="alternate icon" href="/favicon-dark.ico" type="image/x-icon" />
+        <link rel="icon" href="/favicon-dark.ico" type="image/x-icon" media="(prefers-color-scheme: dark)" />
       </Head>
 
       <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white font-sans">
